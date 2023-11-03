@@ -10,24 +10,30 @@ function WebCam() {
     setFolderName(e.target.value);
   };
 
-  const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    
-    const formData = new FormData();
-    formData.append('folderName', folderName);
-  
-    formData.append('image', imageSrc);
-    axios.post('http://localhost:5000/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-      .then(response => {
-        console.log(response.data);
+  const capture = async () => {
+
+    const running = setInterval(async () => {
+      const imageSrc = webcamRef.current.getScreenshot();
+      
+      const formData = new FormData();
+      formData.append('folderName', folderName);
+      formData.append('image', imageSrc);
+      axios.post('http://localhost:5000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       })
-      .catch(error => {
-        console.error(error);
-      });
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error.message);
+        });
+    }
+    ,100);
+    setTimeout(() => {
+      clearInterval(running)
+    },1000);
   };
 
   return (
@@ -43,7 +49,7 @@ function WebCam() {
         value={folderName}
         onChange={handleFolderNameChange}
       />
-      <button onClick={capture}>Capture photo</button>
+      <button onClick={capture}>Start</button>
     </div>
   );
 }
