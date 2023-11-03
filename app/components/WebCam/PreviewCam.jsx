@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 
-function WebCam() {
+function PreviewCam() {
   const webcamRef = useRef(null);
 
 
@@ -43,4 +43,4 @@ function WebCam() {
   );
 }
 
-export default WebCam;
+export default PreviewCam;
