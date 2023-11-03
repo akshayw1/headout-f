@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 
 function PreviewCam() {
   const webcamRef = useRef(null);
 
-
+  const start = () => {
     setInterval(async () => {
       const imageSrc = webcamRef.current.getScreenshot();
       
@@ -17,19 +17,21 @@ function PreviewCam() {
         }
       })
         .then(response => {
-          response.json()
+          console.log(response.data);
+          return response.data;
         })
         .then(
-            response => {
-                const result = document.querySelector('.result');
+          response => {
+            const result = document.querySelector('.result');
                 result.innerHTML = response;
             }
         )
         .catch(error => {
-          console.error(error.message);
+          console.error(error);
         });
     }
     ,3000);
+  };
 
   return (
     <div className="App">
@@ -38,7 +40,8 @@ function PreviewCam() {
         ref={webcamRef}
         screenshotFormat="image/jpeg"
       />
-      <p className='result'></p>
+      <button onClick={start}>Start</button>
+      <p className='result'>Data:</p>
     </div>
   );
 }
