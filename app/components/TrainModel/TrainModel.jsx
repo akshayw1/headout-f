@@ -1,8 +1,6 @@
-import React from 'react'
-import { Button } from "@/components/ui/button"
-import Webcam from 'react-webcam';
-
-
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
 import {
   Card,
   CardContent,
@@ -10,40 +8,55 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Preview from "../WebCam/FinaLPreview";
 
 const TrainModel = () => {
+  const [modelTrained, setModelTrained] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
+
+  const trainButtonClick = async () => {
+    const trainResponse = await axios.get("http://localhost:5000/train");
+    if (trainResponse.status === 200) {
+      console.log("Model Trained Successfully!");
+      setModelTrained(true);
+    } else throw new Error(trainResponse.data);
+  };
+
+  const testModelClick = async () => {
+    // if (modelTrained==false) {
+    //   throw new Error('Model isn\'t trained');
+    // }
+    setPreviewVisible(modelTrained);
+  };
+
   return (
     <div>
-        <div className="flex flex-col w-full lg:flex-row">
-  <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">
-
-  <Card className='widthcard'>
-      
-      <div className='flex'>
-
-        <CardHeader>
-          Train Model Now
-        </CardHeader>
-      
-
-
-
-      </div>
-      <CardFooter className='flex flex-col'>
-      <Button className='rounded-md w-full mt-2'>Train Model</Button>
-      <Button className='rounded-md w-full mt-2'>Test Model</Button>
-      </CardFooter>
-    </Card>
-  {/* <Tabs defaultValue="account" className="w-[400px]">
+      <div className="flex flex-col w-full lg:flex-row">
+        <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">
+          <Card className="widthcard">
+            <div className="flex">
+              <CardHeader>Train Model Now</CardHeader>
+            </div>
+            <CardFooter className="flex flex-col">
+              <Button
+                className="rounded-md w-full mt-2"
+                onClick={trainButtonClick}
+              >
+                Train Model
+              </Button>
+              <Button
+                className="rounded-md w-full mt-2"
+                onClick={testModelClick}
+              >
+                Test Model
+              </Button>
+            </CardFooter>
+          </Card>
+          {/* <Tabs defaultValue="account" className="w-[400px]">
     
     <TabsContent value="account">
     
@@ -93,14 +106,11 @@ dsadassfsafa
 
     </TabsContent>
   </Tabs> */}
-    </div> 
- 
-</div>
-
-
-
+        </div>
+      </div>
+      {previewVisible && <Preview />}
     </div>
-  )
-}
+  );
+};
 
-export default TrainModel
+export default TrainModel;

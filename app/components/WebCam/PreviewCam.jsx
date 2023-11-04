@@ -11,24 +11,27 @@ function PreviewCam() {
       
       const formData = new FormData();
       formData.append('image', imageSrc);
-      axios.post('http://localhost:5000/frame', formData, {
+      const response =await axios.post('http://localhost:5000/frame', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      })
-        .then(response => {
-          console.log(response.data);
-          return response.data;
-        })
-        .then(
-          response => {
-            const result = document.querySelector('.result');
-                result.innerHTML = response;
-            }
-        )
-        .catch(error => {
-          console.error(error);
-        });
+      });
+
+      const prob = response.data;
+      console.log(prob);
+        // .then(response => {
+        //   console.log(response.data);
+        //   return response.data;
+        // })
+        // .then(
+        //   response => {
+        //     const result = document.querySelector('.result');
+        //         result.innerHTML = response;
+        //     }
+        // )
+        // .catch(error => {
+        //   console.error(error);
+        // });
     }
     ,3000);
   };

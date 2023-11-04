@@ -13,7 +13,8 @@ const train = () => {
 <div className="mainboard">
 <WebCam/>
 <TrainModel/>
-<FinaLPreview/>
+{/* <FinaLPreview/> */}
+{/* <PreviewCam/> */}
 </div>
 
 
