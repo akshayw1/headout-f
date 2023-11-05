@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import Webcam from "react-webcam";
 import { Typography } from "@material-tailwind/react";
@@ -19,50 +19,49 @@ import { useRef, useState } from "react";
 
 const Preview = () => {
   const webcamRef = useRef(null);
-  const [classSet, setClasssSet] = useState([]);
-  // const classset=[
-  //   {
-  //       classname : "Akshay",
-  //       PredictScore: "33"
-  //   },
-  //   {
-  //       classname : "Joth",
-  //       PredictScore: "66"
-  //   }
-  // ]
-  // Implemented
+  const [classsSet, setClasssSet] = useState([]); // Initialize with an empty array
 
-  const running = setInterval(async () => {
-    const imageSrc = webcamRef.current.getScreenshot();
+  useEffect(() => {
+    // This effect runs when the component mounts
+    const running = setInterval(async () => {
+      const imageSrc = webcamRef.current.getScreenshot();
 
-    const formData = new FormData();
-    formData.append("image", imageSrc);
-    axios
-      .post("http://localhost:5000/frame", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
+      const formData = new FormData();
+      formData.append('image', imageSrc);
+
+      try {
+        const response = await axios.post('http://localhost:8080/frame', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
         const toSet = [];
-        for (const className in response) {
-          if (response.hasOwnProperty(className)) {
+        for (const className in response.data) {
+          if (response.data.hasOwnProperty(className)) {
             const obj = {
               classname: className,
-              PredictScore: response[className],
+              PredictScore: response.data[className],
             };
             toSet.push(obj);
           }
         }
         setClasssSet(toSet);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error.message);
-      });
-  }, 1000);
-  setTimeout(() => {
-    clearInterval(running)
-  },10000);
+        toast.error('Error fetching response data');
+      }
+    }, 1000);
+
+    // setTimeout(() => {
+    //   clearInterval(running);
+    // }, 10000);
+
+    return () => {
+      clearInterval(running);
+    };
+  }, []);
+
 
   return (
     <div className="flex w-full">
@@ -92,17 +91,25 @@ const Preview = () => {
                 </div>
                 <CardFooter>
                   <div className="w-full">
-                    {classSet.map((e, index) => (
+                  <div>
+        {/* {classsSet.map((data, index) => (
+          <div key={index}>
+            <p>Class Name: {data.classname}</p>
+            <p>Predicted Score: {data.PredictScore}</p>
+          </div>
+        ))} */}
+      </div>
+                    {classsSet.map((data, index) => (
                       <div className="PreviewCl" key={index}>
                         <div className="mb-2 flex items-center justify-between gap-4">
                           <Typography color="blue-gray" variant="h6">
-                            {e.classname}
+                            {data.classname}
                           </Typography>
                           <Typography color="blue-gray" variant="h6">
-                            {e.PredictScore}%
+                            {data.PredictScore}%
                           </Typography>
                         </div>
-                        <Progress value={e.PredictScore} />
+                        <Progress value={data.PredictScore * 100} />
                       </div>
                     ))}
                   </div>
