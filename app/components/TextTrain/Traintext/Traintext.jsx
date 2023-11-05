@@ -51,13 +51,13 @@ const TrainModel = () => {
             <CardFooter className="flex flex-col">
               <Button
                 className="rounded-md w-full mt-2"
-                onClick={trainButtonClick} disabled={loading}
+                
               >
-                {loading ? 'Loading...': 'Train Model'}
+                Train Model
               </Button>
               <Button
                 className="rounded-md w-full mt-2"
-                onClick={testModelClick}
+            
               >
                 Test Model
               </Button>

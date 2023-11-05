@@ -25,15 +25,23 @@ const TextPredict = () => {
     setInputValue(e.target.value);
   };
 
-  const handlePredict = async() => {
+  const handlePredict = async () => {
     const formData = new FormData();
     formData.append('data', inputValue);
-    const response = await axios.post('http://localhost:8080/text-predict',formData, {
-      
-    });
-    console.log('Response data:', response.data);
-    setResponseData(response.data);
+
+    try {
+      const response = await axios.post('http://localhost:8080/text-predict', formData);
+      if (typeof response.data === 'object') {
+        setResponseData(response.data);
+      } else {
+        console.error('Response data is not an object:', response.data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
+  
   return (
     <div>
          <Card className="w-[350px]">
@@ -56,23 +64,27 @@ const TextPredict = () => {
        
         <Button onClick={handlePredict}>Predict</Button>
 
-        {responseData == {} && (
-        <div>
-          <p>Response from the server:</p>
-          <pre>{JSON.stringify(responseData, null, 2)}</pre>
-        </div>
-      )}
-        <div className="PreviewCl" >
-                        <div className="mb-2 flex items-center justify-between gap-4">
-                          <Typography color="blue-gray" variant="h6">
-                                test
-                          </Typography>
-                          <Typography color="blue-gray" variant="h6">
-                            fdsfdsfds
-                          </Typography>
-                        </div>
-                        <Progress value={77} />
-         </div>
+
+
+
+<div className="PreviewCl">
+        {responseData.label_probs && Object.entries(responseData.label_probs).map(([key, value]) => (
+         
+            <div className="PreviewCl" key={key}>
+            <div className="mb-2 flex items-center justify-between gap-4">
+              <Typography color="blue-gray" variant="h6">
+                {key}
+              </Typography>
+              <Typography color="blue-gray" variant="h6">
+                {value}
+              </Typography>
+            </div>
+            <Progress value={value* 100} />
+          </div>
+        ))}
+
+                        {/* <Progress value={responseData.label_probs} /> */}
+                    </div>
       </CardFooter>
     </Card>
 

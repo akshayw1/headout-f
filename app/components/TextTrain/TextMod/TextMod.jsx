@@ -1,7 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
     Card,
     CardContent,
@@ -74,6 +75,7 @@ function App() {
     const response = await axios.post('http://localhost:8080/text-train',finalData);
     if (response.status === 200) {
       console.log("Model Trained")
+      toast.success("Model trained Please Enter Prompt to test")
     }
   };
 
@@ -106,7 +108,7 @@ function App() {
 <div className="flex justify-between align-middle items-center">
   <Label htmlFor="name">Prompt</Label>
   <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 hover:border-transparent rounded-full " onClick={() => addInput(className)} >
-Add Class
+Add Prompt
 </button>
 </div>
 
@@ -132,8 +134,8 @@ Add Class
    
    
 
-        <button onClick={addCard}>Add Card</button>
-      <button onClick={saveData}>Save Data</button>
+        <Button onClick={addCard}>Add Card</Button>
+      <Button onClick={saveData}>Save Data</Button>
     </div>
   );
 }
