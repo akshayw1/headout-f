@@ -68,10 +68,10 @@ function App() {
       const { classification, inputs } = cardData[className];
       formattedData[classification] = inputs;
     }
-    console.log(JSON.stringify(formattedData, null, 2)); // Pretty-printed JSON
-    console.log(formattedData);
-
-    const response = await axios.post('http://localhost:8080/text-train',formattedData);
+    let data = JSON.stringify(formattedData);
+    const finalData = new FormData();
+    finalData.append('data',data);
+    const response = await axios.post('http://localhost:8080/text-train',finalData);
     if (response.status === 200) {
       console.log("Model Trained")
     }
