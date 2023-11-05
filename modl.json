@@ -1,0 +1,14 @@
+{
+    "input1": {
+        "input1": "dfsfdf",
+        "input2": "fdsf",
+        "input3": "fsdf",
+        "classification": "fdsfds"
+    },
+    "input2": {
+        "input1": "text 1",
+        "input2": "text 2",
+        "input3": "text 3",
+        "classification": "Sad"
+    }
+}

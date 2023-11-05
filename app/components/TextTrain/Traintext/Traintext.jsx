@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Preview from "../WebCam/FinaLPreview";
+import Preview from "../../WebCam/FinaLPreview";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,7 +24,7 @@ const TrainModel = () => {
 
   const trainButtonClick = async () => {
     setLoading(true);
-    const trainResponse = await axios.get("http://localhost:8080/train");
+    const trainResponse = await axios.post("http://localhost:8080/text-train");
     if (trainResponse.status === 200) {
       console.log("Model Trained Please test for Preview");
       setafterLoadingName("Model Trained Please test");
@@ -44,7 +44,7 @@ const TrainModel = () => {
     <div>
       <div className="flex flex-col w-full lg:flex-row">
         <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">
-          <Card className="widthcard">
+          <Card className="">
             <div className="flex">
               <CardHeader>Train Model Now</CardHeader>
             </div>
@@ -116,7 +116,7 @@ dsadassfsafa
         </div>
       </div>
       <div> 
-        {previewVisible && <Preview />}
+        {/* {previewVisible && <Preview />} */}
            </div>
     </div>
   );
