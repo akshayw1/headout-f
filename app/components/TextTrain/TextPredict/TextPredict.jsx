@@ -27,11 +27,9 @@ const TextPredict = () => {
 
   const handlePredict = async() => {
     const formData = new FormData();
-    formData.append('text', inputValue);
+    formData.append('data', inputValue);
     const response = await axios.post('http://localhost:8080/text-predict',formData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      
     });
     console.log('Response data:', response.data);
     setResponseData(response.data);
